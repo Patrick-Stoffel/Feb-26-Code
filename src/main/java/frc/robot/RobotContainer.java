@@ -5,8 +5,9 @@ import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
-
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -19,8 +20,13 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(0);
-    //private final XboxController driver = new XboxController(0);
+    private final Joystick driver = new Joystick(1);
+    private final CommandXboxController operatorController = new CommandXboxController(0);
+
+    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+    private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
+    private final KickerSubsystem kickerSubsystem = new KickerSubsystem();
+    private final ArmSubsystem armSubsystem = new ArmSubsystem();
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -30,6 +36,9 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+    
+    
+    
 
     /* Subsystems */
     private final Swerve s_Swerve = new Swerve();
@@ -60,6 +69,17 @@ public class RobotContainer {
     private void configureButtonBindings() {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
+
+        
+
+        operatorController.rightTrigger(.5).onTrue(new ShooterKickerSCG(shooterSubsystem, kickerSubsystem));
+        operatorController.a().whileTrue(new IntakeCommand(intakeSubsystem, Constants.intakeVoltage));
+        operatorController.b().whileTrue(new ArmCommand(armSubsystem, Constants.armVoltage));
+
+
+
+    
+        
     }
 
     /**
