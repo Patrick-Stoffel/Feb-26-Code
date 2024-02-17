@@ -1,9 +1,17 @@
 package frc.robot;
 
+import java.util.ArrayList;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -11,6 +19,14 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
 import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
+
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
+import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.path.GoalEndState;
+import com.pathplanner.lib.path.PathConstraints;
+import com.pathplanner.lib.path.PathPlannerPath;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,13 +36,16 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(1);
-    private final CommandXboxController operatorController = new CommandXboxController(0);
+    private final Joystick driver = new Joystick(0);
+    private final Joystick operatorpJoystick = new Joystick(1);
+   // private final CommandXboxController operatorController = new CommandXboxController(0);
 
     private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     private final KickerSubsystem kickerSubsystem = new KickerSubsystem();
     private final ArmSubsystem armSubsystem = new ArmSubsystem();
+
+    
 
     /* Drive Controls */
     private final int translationAxis = XboxController.Axis.kLeftY.value;
@@ -36,8 +55,10 @@ public class RobotContainer {
     /* Driver Buttons */
     private final JoystickButton zeroGyro = new JoystickButton(driver, XboxController.Button.kY.value);
     private final JoystickButton robotCentric = new JoystickButton(driver, XboxController.Button.kLeftBumper.value);
+
     
     
+    private final SendableChooser<Command> autoChooser;
     
 
     /* Subsystems */
@@ -56,8 +77,15 @@ public class RobotContainer {
             )
         );
 
+       // NamedCommands.registerCommand("marker 1", Commands.print("Passed marker 1"));
+      //  NamedCommands.registerCommand("marker 2", Commands.print("Passed marker 2"));
+        
+
         // Configure the button bindings
         configureButtonBindings();
+
+       // autoChooser = AutoBuilder.buildAutoChooser();
+      //  SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
     /**
@@ -70,18 +98,55 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
+       // SmartDashboard.putData("Example Auto", new PathPlannerAuto("Example Auto"));
+
+      /*   SmartDashboard.putData("Pathfind to Pickup Pos", AutoBuilder.pathfindToPose(
+            new Pose2d(14.0, 6.5, Rotation2d.fromDegrees(0)),
+            new PathConstraints(
+                4.0, 4.0,
+                Units.degreesToRadians(360), Units.degreesToRadians(540)
+            ),
+            0,
+            2.0
+        ));
+        */
+
+      /*   SmartDashboard.putData("Pathfind to scoring Pos", AutoBuilder.pathfindToPose(
+            new Pose2d(2.15, 3.0, Rotation2d.fromDegrees(180)),
+            new PathConstraints(
+                4.0, 4.0,
+                Units.degreesToRadians(360), Units.degreesToRadians(540)
+            )
+        ));
+
+       /* SmartDashboard.putData("On-the-fly path", Commands.runOnce(() -> {
+            Pose2d currentPose = swerve.getPose();
+
+            Pose2d startPose = new Pose2d(currentPose.getTranslation(), new Rotation2d());
+            PathPlannerPath endPos = new PathPlannerPath(
+                bezierPoints,
+                new PathConstraints(
+                    4.0, 4.0,
+                    Units.degreesToRadians(360), Units.degreesToRadians(540)
+                ),  
+                new GoalEndState(0.0, currentPose.getRotation())
+            );
+
+            path.preventFlipping = true;
+
+            AutoBuilder.followPath(path).schedule();
+        }));*/
+
         
 
-        operatorController.rightTrigger(.5).onTrue(new ShooterKickerSCG(shooterSubsystem, kickerSubsystem));
-        operatorController.a().whileTrue(new IntakeCommand(intakeSubsystem, Constants.intakeVoltage));
-        operatorController.b().whileTrue(new ArmCommand(armSubsystem, Constants.armVoltage));
+        
 
+        //operatorController.rightTrigger(.5).onTrue(new ShooterKickerSCG(shooterSubsystem, kickerSubsystem));
+        //operatorController.a().whileTrue(new IntakeCommand(intakeSubsystem, Constants.intakeVoltage));
+     //   operatorController.b().whileTrue(new ArmCommand(armSubsystem, Constants.armVoltage));
 
-
-    
         
     }
-
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
@@ -89,6 +154,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return new exampleAuto(s_Swerve);
+        return autoChooser.getSelected();
     }
+ 
 }

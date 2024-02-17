@@ -4,6 +4,8 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.controls.VoltageOut;
+import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
@@ -11,13 +13,14 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class KickerSubsystem extends SubsystemBase {
   /** Creates a new KickerSubsystem. */
-  private static CANSparkMax kickerMotor;
+  private static TalonFX kickerMotor;
+  final VoltageOut kickerVoltageOutRequest = new VoltageOut(0);
   public KickerSubsystem() {
-    kickerMotor = new CANSparkMax(16, MotorType.kBrushless);
-    kickerMotor.restoreFactoryDefaults();
+    kickerMotor = new TalonFX(24, "rio");
+    kickerMotor.getConfigurator();
     kickerMotor.setInverted(false);
-    kickerMotor.setSmartCurrentLimit(80);
-    kickerMotor.burnFlash();
+    
+    
   }
 
   @Override
@@ -26,6 +29,8 @@ public class KickerSubsystem extends SubsystemBase {
   }
 
   public void setKickerSpeed(double kickerVolts) {
-    kickerMotor.setVoltage(kickerVolts);
+    kickerMotor.setControl(kickerVoltageOutRequest.withOutput(kickerVolts));
   }
+
+
 }
