@@ -51,7 +51,7 @@ public class RobotContainer {
 
     
     
-    private final SendableChooser<Command> autoChooser;
+    
     
 
     /* Subsystems */
@@ -146,9 +146,9 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    public Command getAutonomousCommand() {
+    //public Command getAutonomousCommand() {
         // An ExampleCommand will run in autonomous
-        return autoChooser.getSelected();
-    }
+       // return autoChooser.getSelected();
+    //}
  
 }
