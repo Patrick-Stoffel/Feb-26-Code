@@ -36,7 +36,7 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomShooterMotor.setInverted(false);
     bottomShooterMotor.burnFlash();
 
-    bottomEncoder = bottomShooterMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+   // bottomEncoder = bottomShooterMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
   }
 

@@ -18,9 +18,11 @@ public final class Constants {
 
     public static final double intakeVoltage = 6.0;
     public static final double topShooterVoltage = 10.0;
-    public static final double bottomShooterVoltage = 6.0;
-    public static final double kickerVoltage = 5.0;
+    public static final double bottomShooterVoltage = 10.0;
+    public static final double kickerVoltage = 6.0;
     public static final double armVoltage = 3.0;
+    public static final double downArmVoltage = -3.0;
+    public static final double backKickerVoltage = -6.0;
     
 
     public static final class Swerve { 

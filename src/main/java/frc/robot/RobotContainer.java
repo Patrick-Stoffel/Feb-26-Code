@@ -20,8 +20,8 @@ import frc.robot.subsystems.*;
  */
 public class RobotContainer {
     /* Controllers */
-    private final Joystick driver = new Joystick(1);
-    private final CommandXboxController operatorController = new CommandXboxController(0);
+    private final Joystick driver = new Joystick(0);
+    private final Joystick operatorJoystick = new Joystick(1);
 
     private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
@@ -72,10 +72,12 @@ public class RobotContainer {
 
         
 
-        operatorController.rightTrigger(.5).onTrue(new ShooterKickerSCG(shooterSubsystem, kickerSubsystem));
-        operatorController.a().whileTrue(new IntakeCommand(intakeSubsystem, Constants.intakeVoltage));
-        operatorController.b().whileTrue(new ArmCommand(armSubsystem, Constants.armVoltage));
-
+        new JoystickButton(operatorJoystick, 6).whileTrue(new ShooterCommand(shooterSubsystem, Constants.topShooterVoltage , Constants.bottomShooterVoltage));
+        new JoystickButton(operatorJoystick, 2).whileTrue(new KickerCommand(kickerSubsystem, Constants.kickerVoltage));
+        new JoystickButton(operatorJoystick, 12).whileTrue(new ArmCommand(armSubsystem, Constants.armVoltage));
+        new JoystickButton(operatorJoystick, 11).whileTrue(new ArmCommand(armSubsystem, Constants.downArmVoltage));
+        new JoystickButton(operatorJoystick, 1).whileTrue(new IntakeCommand(intakeSubsystem, Constants.intakeVoltage));
+        new JoystickButton(operatorJoystick, 4).whileTrue(new KickerCommand(kickerSubsystem, Constants.backKickerVoltage));
 
 
     

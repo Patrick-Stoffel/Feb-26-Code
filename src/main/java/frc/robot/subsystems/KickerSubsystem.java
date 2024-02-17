@@ -19,6 +19,7 @@ public class KickerSubsystem extends SubsystemBase {
     kickerMotor = new TalonFX(24, "rio");
     kickerMotor.getConfigurator();
     
+    
     kickerMotor.setInverted(false);
     
 
