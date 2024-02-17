@@ -14,7 +14,7 @@ public class ArmSubsystem extends SubsystemBase {
   private static CANSparkFlex armMotor;
   public ArmSubsystem() {
     armMotor = new CANSparkFlex(18, MotorType.kBrushless);
-    armMotor.restoreFactoryDefaults();
+   
     armMotor.setInverted(false);
     armMotor.setSmartCurrentLimit(80);
     armMotor.burnFlash();
