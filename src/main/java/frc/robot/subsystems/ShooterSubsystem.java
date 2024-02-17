@@ -23,7 +23,7 @@ public class ShooterSubsystem extends SubsystemBase {
   private static RelativeEncoder bottomEncoder;
   public ShooterSubsystem() {
     topShooterMotor = new CANSparkMax(21, MotorType.kBrushless);
-    topShooterMotor.restoreFactoryDefaults();
+
     topShooterMotor.setInverted(true);
     topShooterMotor.setSmartCurrentLimit(80);
     topShooterMotor.burnFlash();
@@ -31,12 +31,12 @@ public class ShooterSubsystem extends SubsystemBase {
     topEncoder = topShooterMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
     bottomShooterMotor = new CANSparkMax(22, MotorType.kBrushless);
-    bottomShooterMotor.restoreFactoryDefaults();
+  
     bottomShooterMotor.setSmartCurrentLimit(80);
     bottomShooterMotor.setInverted(false);
     bottomShooterMotor.burnFlash();
 
-    bottomEncoder = bottomShooterMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+   // bottomEncoder = bottomShooterMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
   }
 

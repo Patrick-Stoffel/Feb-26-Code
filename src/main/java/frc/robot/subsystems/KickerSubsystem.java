@@ -14,6 +14,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 public class KickerSubsystem extends SubsystemBase {
   /** Creates a new KickerSubsystem. */
   private static TalonFX kickerMotor;
+<<<<<<< HEAD
   final VoltageOut kickerVoltageOutRequest = new VoltageOut(0);
   public KickerSubsystem() {
     kickerMotor = new TalonFX(24, "rio");
@@ -21,6 +22,17 @@ public class KickerSubsystem extends SubsystemBase {
     kickerMotor.setInverted(false);
     
     
+=======
+    final VoltageOut kickerVoltageOutRequest = new VoltageOut(0);
+  public KickerSubsystem() {
+    kickerMotor = new TalonFX(24, "rio");
+    kickerMotor.getConfigurator();
+    
+    
+    kickerMotor.setInverted(false);
+    
+
+>>>>>>> working
   }
 
   @Override
@@ -28,7 +40,12 @@ public class KickerSubsystem extends SubsystemBase {
     // This method will be called once per scheduler run
   }
 
+  
   public void setKickerSpeed(double kickerVolts) {
+<<<<<<< HEAD
+=======
+    
+>>>>>>> working
     kickerMotor.setControl(kickerVoltageOutRequest.withOutput(kickerVolts));
   }
 

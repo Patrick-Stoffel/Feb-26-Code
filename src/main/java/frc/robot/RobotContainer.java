@@ -20,13 +20,6 @@ import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
-import com.pathplanner.lib.auto.AutoBuilder;
-import com.pathplanner.lib.auto.NamedCommands;
-import com.pathplanner.lib.commands.PathPlannerAuto;
-import com.pathplanner.lib.path.GoalEndState;
-import com.pathplanner.lib.path.PathConstraints;
-import com.pathplanner.lib.path.PathPlannerPath;
-
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -37,7 +30,7 @@ import com.pathplanner.lib.path.PathPlannerPath;
 public class RobotContainer {
     /* Controllers */
     private final Joystick driver = new Joystick(0);
-    private final Joystick operatorpJoystick = new Joystick(1);
+    private final Joystick operatorJoystick = new Joystick(1);
    // private final CommandXboxController operatorController = new CommandXboxController(0);
 
     private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
@@ -139,11 +132,12 @@ public class RobotContainer {
 
         
 
-        
-
-        //operatorController.rightTrigger(.5).onTrue(new ShooterKickerSCG(shooterSubsystem, kickerSubsystem));
-        //operatorController.a().whileTrue(new IntakeCommand(intakeSubsystem, Constants.intakeVoltage));
-     //   operatorController.b().whileTrue(new ArmCommand(armSubsystem, Constants.armVoltage));
+        new JoystickButton(operatorJoystick, 6).whileTrue(new ShooterCommand(shooterSubsystem, Constants.topShooterVoltage , Constants.bottomShooterVoltage));
+        new JoystickButton(operatorJoystick, 2).whileTrue(new KickerCommand(kickerSubsystem, Constants.kickerVoltage));
+        new JoystickButton(operatorJoystick, 12).whileTrue(new ArmCommand(armSubsystem, Constants.armVoltage));
+        new JoystickButton(operatorJoystick, 11).whileTrue(new ArmCommand(armSubsystem, Constants.downArmVoltage));
+        new JoystickButton(operatorJoystick, 1).whileTrue(new IntakeCommand(intakeSubsystem, Constants.intakeVoltage));
+        new JoystickButton(operatorJoystick, 4).whileTrue(new KickerCommand(kickerSubsystem, Constants.backKickerVoltage));
 
         
     }

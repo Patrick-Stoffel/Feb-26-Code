@@ -5,6 +5,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkFlex;
+import com.revrobotics.CANSparkBase.IdleMode;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -14,7 +15,7 @@ public class ArmSubsystem extends SubsystemBase {
   private static CANSparkFlex armMotor;
   public ArmSubsystem() {
     armMotor = new CANSparkFlex(18, MotorType.kBrushless);
-    armMotor.restoreFactoryDefaults();
+    armMotor.setIdleMode(IdleMode.kBrake);
     armMotor.setInverted(false);
     armMotor.setSmartCurrentLimit(80);
     armMotor.burnFlash();
