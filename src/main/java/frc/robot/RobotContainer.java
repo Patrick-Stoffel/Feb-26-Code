@@ -2,21 +2,27 @@ package frc.robot;
 
 import java.util.ArrayList;
 
+import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Voltage;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.Joystick;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.XboxController;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import edu.wpi.first.wpilibj2.command.Commands;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
-import frc.robot.autos.*;
+//import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
 
@@ -32,11 +38,31 @@ public class RobotContainer {
     private final Joystick driver = new Joystick(0);
     private final Joystick operatorJoystick = new Joystick(1);
    // private final CommandXboxController operatorController = new CommandXboxController(0);
-
-    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+    
+   //Subsystems
+    //private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
     private final ShooterSubsystem shooterSubsystem = new ShooterSubsystem();
     private final KickerSubsystem kickerSubsystem = new KickerSubsystem();
     private final ArmSubsystem armSubsystem = new ArmSubsystem();
+    private final IntakeAndKickerSubsystem intakeAndKickerSubsystem = new IntakeAndKickerSubsystem();
+    private final IntakeSubsystem intakeSubsystem = new IntakeSubsystem();
+    
+    private final Swerve s_Swerve = new Swerve();
+
+
+    
+    //Auto names
+    //private final Command ShootOnlyAuto = new ShootOnlyAuto(shooterSubsystem, kickerSubsystem, armSubsystem);
+    //private final Command ShootAndMoveAuto = new ShootAndMoveAuto(s_Swerve, shooterSubsystem, kickerSubsystem, armSubsystem);
+    //private final Command TwoNoteAuto = new TwoNoteAuto(s_Swerve, shooterSubsystem, kickerSubsystem, armSubsystem, intakeAndKickerSubsystem);
+   // private final Command ThreeNoteAuto = new ThreeNoteAuto(s_Swerve, shooterSubsystem, kickerSubsystem, armSubsystem, intakeAndKickerSubsystem);
+   // private final Command FourNoteAuto = new FourNoteAuto(s_Swerve, shooterSubsystem, kickerSubsystem, armSubsystem, intakeAndKickerSubsystem);
+
+    // add auto chooser
+    SendableChooser<Command> m_Chooser = new SendableChooser<>();
+   
+
+    
 
     
 
@@ -54,8 +80,6 @@ public class RobotContainer {
     
     
 
-    /* Subsystems */
-    private final Swerve s_Swerve = new Swerve();
 
 
     /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -72,6 +96,22 @@ public class RobotContainer {
 
        // NamedCommands.registerCommand("marker 1", Commands.print("Passed marker 1"));
       //  NamedCommands.registerCommand("marker 2", Commands.print("Passed marker 2"));
+
+       // NamedCommands.registerCommand("shootFromSub", new shootFromSubParallel(shooterSubsystem, armSubsystem, kickerSubsystem));
+/* 
+        m_Chooser.setDefaultOption("Shoot Only Auto", ShootOnlyAuto);
+        m_Chooser.addOption("Shoot and Move Auto", ShootAndMoveAuto);
+        m_Chooser.addOption("Two Note Auto", TwoNoteAuto);
+        m_Chooser.addOption("Three Note Auto", ThreeNoteAuto);
+        m_Chooser.addOption("Four Note Auto", FourNoteAuto);
+*/
+        Shuffleboard.getTab("Auto").add(m_Chooser);
+
+    
+      
+      
+
+ 
         
 
         // Configure the button bindings
@@ -91,57 +131,40 @@ public class RobotContainer {
         /* Driver Buttons */
         zeroGyro.onTrue(new InstantCommand(() -> s_Swerve.zeroHeading()));
 
-       // SmartDashboard.putData("Example Auto", new PathPlannerAuto("Example Auto"));
+        new JoystickButton(operatorJoystick, 1).onTrue(new IntakeAndKickerCMD(intakeAndKickerSubsystem, VoltageConstants.vk_IntakeForward, VoltageConstants.vk_KickerForward, kickerSubsystem));
 
-      /*   SmartDashboard.putData("Pathfind to Pickup Pos", AutoBuilder.pathfindToPose(
-            new Pose2d(14.0, 6.5, Rotation2d.fromDegrees(0)),
-            new PathConstraints(
-                4.0, 4.0,
-                Units.degreesToRadians(360), Units.degreesToRadians(540)
-            ),
-            0,
-            2.0
-        ));
-        */
+        //new JoystickButton(operatorJoystick, 2).onTrue(new shootFromPodiumSCG(armSubsystem, shooterSubsystem, kickerSubsystem));
 
-      /*   SmartDashboard.putData("Pathfind to scoring Pos", AutoBuilder.pathfindToPose(
-            new Pose2d(2.15, 3.0, Rotation2d.fromDegrees(180)),
-            new PathConstraints(
-                4.0, 4.0,
-                Units.degreesToRadians(360), Units.degreesToRadians(540)
-            )
-        ));
+        new JoystickButton(operatorJoystick, 8).onTrue(new shootFromSubSCG(shooterSubsystem, armSubsystem, kickerSubsystem));
 
-       /* SmartDashboard.putData("On-the-fly path", Commands.runOnce(() -> {
-            Pose2d currentPose = swerve.getPose();
+        new JoystickButton(operatorJoystick, 4).onTrue(new shootAmpSCG(armSubsystem, shooterSubsystem, kickerSubsystem));
 
-            Pose2d startPose = new Pose2d(currentPose.getTranslation(), new Rotation2d());
-            PathPlannerPath endPos = new PathPlannerPath(
-                bezierPoints,
-                new PathConstraints(
-                    4.0, 4.0,
-                    Units.degreesToRadians(360), Units.degreesToRadians(540)
-                ),  
-                new GoalEndState(0.0, currentPose.getRotation())
-            );
+       // new JoystickButton(operatorJoystick, 7).onTrue(new shootMaxRangeSCG(armSubsystem, shooterSubsystem, kickerSubsystem));
 
-            path.preventFlipping = true;
+        new JoystickButton(operatorJoystick, 11).whileTrue(new MoveArmCMD(armSubsystem, VoltageConstants.vk_ArmUp));
+        new JoystickButton(operatorJoystick, 12).whileTrue(new MoveArmCMD(armSubsystem, VoltageConstants.vk_ArmDown));
 
-            AutoBuilder.followPath(path).schedule();
-        }));*/
+        new JoystickButton(operatorJoystick, 6).whileTrue(new IntakeCMD(intakeSubsystem, VoltageConstants.vk_IntakeForward));
 
-        
+        new JoystickButton(operatorJoystick, 5).whileTrue(new RunKickerCMD(kickerSubsystem, VoltageConstants.vk_KickerForward));
+       
+        new JoystickButton(operatorJoystick, 10).whileTrue(new RunKickerCMD(kickerSubsystem, VoltageConstants.vk_KickerReverse));
 
-        new JoystickButton(operatorJoystick, 6).whileTrue(new ShooterCommand(shooterSubsystem, Constants.topShooterVoltage , Constants.bottomShooterVoltage));
-        new JoystickButton(operatorJoystick, 2).whileTrue(new KickerCommand(kickerSubsystem, Constants.kickerVoltage));
-        new JoystickButton(operatorJoystick, 12).whileTrue(new ArmCommand(armSubsystem, Constants.armVoltage));
-        new JoystickButton(operatorJoystick, 11).whileTrue(new ArmCommand(armSubsystem, Constants.downArmVoltage));
-        new JoystickButton(operatorJoystick, 1).whileTrue(new IntakeCommand(intakeSubsystem, Constants.intakeVoltage));
-        new JoystickButton(operatorJoystick, 4).whileTrue(new KickerCommand(kickerSubsystem, Constants.backKickerVoltage));
+        new JoystickButton(operatorJoystick, 9).whileTrue(new RunShooterCMD(shooterSubsystem, VoltageConstants.vk_TopShooterAmp, VoltageConstants.vk_BottomShooterAmp));
 
+       // new JoystickButton(operatorJoystick, 6).whileTrue(new ShooterCommand(shooterSubsystem, Constants.topShooterVoltage , Constants.bottomShooterVoltage));
+       // new JoystickButton(operatorJoystick, 8).whileTrue(new RunKickerCMD(kickerSubsystem, Constants.k_KickerVoltage));
+        //new JoystickButton(operatorJoystick, 12).whileTrue(new MoveArmManuallyCMD(armSubsystem, Constants.k_UpArmVoltage));
+        //new JoystickButton(operatorJoystick, 11).whileTrue(new MoveArmManuallyCMD(armSubsystem, Constants.k_DownArmVoltage));
+       // new JoystickButton(operatorJoystick, 1).whileTrue(new IntakeCommand(intakeSubsystem, Constants.intakeVoltage));
+        //new JoystickButton(operatorJoystick, 4).whileTrue(new RunKickerCMD(kickerSubsystem, Constants.k_BackKickerVoltage));
+
+        //new JoystickButton(operatorJoystick, 2).onTrue(new ShooterKickerSCG(shooterSubsystem, kickerSubsystem, armSubsystem));
+
+        //new JoystickButton(operatorJoystick, 1).whileTrue(new RunKickerCMD(kickerSubsystem, Constants.k_KickerVoltage).alongWith(new RunIntakeCMD(intakeSubsystem, Constants.k_IntakeVoltage)));
         
     }
-    /**
+    /** 
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous

@@ -7,12 +7,12 @@ package frc.robot.commands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.ShooterSubsystem;
 
-public class ShooterCommand extends Command {
-  /** Creates a new ShooterCommand. */
+public class RunShooterCMD extends Command {
+  // Creates a new ShooterCommand. 
   private final ShooterSubsystem shooterSubsystem;
   private double topShooterVolts;
   private double bottomShooterVolts;
-  public ShooterCommand(ShooterSubsystem shooterSubsystem, double topShooterVolts, double bottomShooterVolts) {
+  public RunShooterCMD(ShooterSubsystem shooterSubsystem, double topShooterVolts, double bottomShooterVolts) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.shooterSubsystem = shooterSubsystem;
     this.topShooterVolts = topShooterVolts;
@@ -46,4 +46,10 @@ public class ShooterCommand extends Command {
   public boolean isFinished() {
     return false;
   }
+
+  
+
+  
+
+
 }

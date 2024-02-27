@@ -4,7 +4,7 @@
 
 package frc.robot.subsystems;
 
-import com.revrobotics.CANSparkFlex;
+// import com.revrobotics.CANSparkFlex;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.SparkRelativeEncoder;
@@ -36,7 +36,7 @@ public class ShooterSubsystem extends SubsystemBase {
     bottomShooterMotor.setInverted(false);
     bottomShooterMotor.burnFlash();
 
-   // bottomEncoder = bottomShooterMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
+    bottomEncoder = bottomShooterMotor.getEncoder(SparkRelativeEncoder.Type.kHallSensor, 42);
 
   }
 
@@ -53,6 +53,8 @@ public class ShooterSubsystem extends SubsystemBase {
   public double getShooterVelocity(){
     return(topEncoder.getVelocity());
   }
+  //public double getShooterVelocity(){
+    //return(bottomEncoder.getVelocity());
+  //}
     
-  
 }

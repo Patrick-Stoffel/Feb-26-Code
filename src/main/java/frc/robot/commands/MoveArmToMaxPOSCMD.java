@@ -5,15 +5,19 @@
 package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.EncoderConstants;
 import frc.robot.subsystems.ArmSubsystem;
 
-public class ArmCommand extends Command {
-  /** Creates a new ArmCommand. */
+public class MoveArmToMaxPOSCMD extends Command {
+  /** Creates a new MoveArmToPodShotCMD. */
   private final ArmSubsystem armSubsystem;
   private double armVolts;
-  public ArmCommand(ArmSubsystem armSubsystem, double armVolts) {
+  
+
+  public MoveArmToMaxPOSCMD(ArmSubsystem armSubsystem, double armVolts) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.armSubsystem = armSubsystem;
+    
     this.armVolts = armVolts;
 
     addRequirements(armSubsystem);
@@ -22,7 +26,7 @@ public class ArmCommand extends Command {
   // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("ArmCMD Started");
+    System.out.println("Move Arm To Pod Shot Start");
   }
 
   // Called every time the scheduler runs while the command is scheduled.
@@ -35,12 +39,15 @@ public class ArmCommand extends Command {
   @Override
   public void end(boolean interrupted) {
     armSubsystem.setArmVoltage(0);
-    System.out.println("ArmCMD Stopped");
+    System.out.println("Move ARm To Pod Shot Stop");
   }
 
   // Returns true when the command should end.
   @Override
   public boolean isFinished() {
-    return false;
+    if (armSubsystem.getArmEncoderPOS() <= EncoderConstants.ek_MaxRangeShotArmPOS) {
+      return true;
+    }
+    else{return false;}
   }
 }

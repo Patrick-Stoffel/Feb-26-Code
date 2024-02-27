@@ -4,15 +4,18 @@
 
 package frc.robot.commands;
 
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.KickerSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
 
-public class KickerCommand extends Command {
-  /** Creates a new KickerCommand. */
-  private final KickerSubsystem kickerSubsystem;
+public class RunKickerTimeBaseCMD extends Command {
+  /** Creates a new RunKickerTimeBaseCMD. */
+   private final KickerSubsystem kickerSubsystem;
   private double kickerVolts;
-  public KickerCommand(KickerSubsystem kickerSubsystem, double kickerVolts) {
+  private double startTime;
+  private double currentTime;
+  
+  public RunKickerTimeBaseCMD(KickerSubsystem kickerSubsystem, double kickerVolts) {
     // Use addRequirements() here to declare subsystem dependencies.
     this.kickerSubsystem = kickerSubsystem;
     
@@ -21,28 +24,28 @@ public class KickerCommand extends Command {
     addRequirements(kickerSubsystem);
   }
 
-
-
-// Called when the command is initially scheduled.
+  // Called when the command is initially scheduled.
   @Override
   public void initialize() {
-    System.out.println("KickerCMD Started");
+    System.out.println("Run Kicker Time Base Start");
+    startTime = Timer.getFPGATimestamp();
   }
 
   // Called every time the scheduler runs while the command is scheduled.
   @Override
   public void execute() {
-   kickerSubsystem.setKickerSpeed(kickerVolts);
+    currentTime = Timer.getFPGATimestamp();
+    if (currentTime - startTime > 1.5 ){
     
+    kickerSubsystem.setKickerSpeed(kickerVolts);
+    }
   }
-
-  //change
 
   // Called once the command ends or is interrupted.
   @Override
   public void end(boolean interrupted) {
     kickerSubsystem.setKickerSpeed(0);
-    System.out.println("KickerCMD Stopped");
+    System.out.println("Run Kicker Time Base Stop");
   }
 
   // Returns true when the command should end.

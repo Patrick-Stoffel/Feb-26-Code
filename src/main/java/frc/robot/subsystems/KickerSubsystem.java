@@ -6,21 +6,25 @@ package frc.robot.subsystems;
 
 import com.ctre.phoenix6.controls.VoltageOut;
 import com.ctre.phoenix6.hardware.TalonFX;
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkLowLevel.MotorType;
 
+
+
+//import edu.wpi.first.wpilibj.DigitalInput;  //commented out since we don't have the sensor yet BDG
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class KickerSubsystem extends SubsystemBase {
   /** Creates a new KickerSubsystem. */
   private static TalonFX kickerMotor;
     final VoltageOut kickerVoltageOutRequest = new VoltageOut(0);
+   
+
+  //private static DigitalInput intakeBeamBrake;  //commented out since we don't have the sensor yet BDG
   public KickerSubsystem() {
     kickerMotor = new TalonFX(24, "rio");
     kickerMotor.getConfigurator();
-    
-    
     kickerMotor.setInverted(false);
+
+      //commented out since we don't have the sensor yet BDG
     
 
   }
@@ -35,6 +39,8 @@ public class KickerSubsystem extends SubsystemBase {
     
     kickerMotor.setControl(kickerVoltageOutRequest.withOutput(kickerVolts));
   }
+
+ 
 
 
 }
