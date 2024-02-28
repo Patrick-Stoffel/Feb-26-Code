@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
+import frc.robot.autos.ShootOnlyAuto;
 //import frc.robot.autos.*;
 import frc.robot.commands.*;
 import frc.robot.subsystems.*;
@@ -52,7 +53,7 @@ public class RobotContainer {
 
     
     //Auto names
-    //private final Command ShootOnlyAuto = new ShootOnlyAuto(shooterSubsystem, kickerSubsystem, armSubsystem);
+    private final Command ShootOnlyAuto = new ShootOnlyAuto(shooterSubsystem, kickerSubsystem, armSubsystem);
     //private final Command ShootAndMoveAuto = new ShootAndMoveAuto(s_Swerve, shooterSubsystem, kickerSubsystem, armSubsystem);
     //private final Command TwoNoteAuto = new TwoNoteAuto(s_Swerve, shooterSubsystem, kickerSubsystem, armSubsystem, intakeAndKickerSubsystem);
    // private final Command ThreeNoteAuto = new ThreeNoteAuto(s_Swerve, shooterSubsystem, kickerSubsystem, armSubsystem, intakeAndKickerSubsystem);
@@ -98,9 +99,9 @@ public class RobotContainer {
       //  NamedCommands.registerCommand("marker 2", Commands.print("Passed marker 2"));
 
        // NamedCommands.registerCommand("shootFromSub", new shootFromSubParallel(shooterSubsystem, armSubsystem, kickerSubsystem));
-/* 
+ 
         m_Chooser.setDefaultOption("Shoot Only Auto", ShootOnlyAuto);
-        m_Chooser.addOption("Shoot and Move Auto", ShootAndMoveAuto);
+/*      m_Chooser.addOption("Shoot and Move Auto", ShootAndMoveAuto);
         m_Chooser.addOption("Two Note Auto", TwoNoteAuto);
         m_Chooser.addOption("Three Note Auto", ThreeNoteAuto);
         m_Chooser.addOption("Four Note Auto", FourNoteAuto);
@@ -117,7 +118,7 @@ public class RobotContainer {
         // Configure the button bindings
         configureButtonBindings();
 
-       // autoChooser = AutoBuilder.buildAutoChooser();
+       // autoChooser = AutoBuilder.buildAutoChooser();        Teteza's Pathplanner lines
       //  SmartDashboard.putData("Auto Mode", autoChooser);
     }
 
@@ -169,9 +170,8 @@ public class RobotContainer {
      *
      * @return the command to run in autonomous
      */
-    //public Command getAutonomousCommand() {
-        // An ExampleCommand will run in autonomous
-       // return autoChooser.getSelected();
-    //}
+    public Command getAutonomousCommand() {
+        return m_Chooser.getSelected();
+    }
  
 }
