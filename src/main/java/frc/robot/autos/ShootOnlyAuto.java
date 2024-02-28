@@ -1,25 +1,10 @@
-/*package frc.robot.autos;
+package frc.robot.autos;
 
-import frc.robot.Constants;
 import frc.robot.commands.shootFromSubSCG;
 import frc.robot.subsystems.ArmSubsystem;
 import frc.robot.subsystems.KickerSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.Swerve;
-
-import java.util.List;
-
-import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.controller.ProfiledPIDController;
-import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
-import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryConfig;
-import edu.wpi.first.math.trajectory.TrajectoryGenerator;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
 public class ShootOnlyAuto extends SequentialCommandGroup {
     public ShootOnlyAuto(ShooterSubsystem shooterSubsystem, KickerSubsystem kickerSubsystem, ArmSubsystem armSubsystem){
@@ -55,13 +40,13 @@ public class ShootOnlyAuto extends SequentialCommandGroup {
                 thetaController,
                 s_Swerve::setModuleStates,
                 s_Swerve);
-                
+         */       
 
 
         addCommands(
-          new shootFromSubSCG(armSubsystem, shooterSubsystem, kickerSubsystem)
+          new shootFromSubSCG(shooterSubsystem, armSubsystem, kickerSubsystem)
         );
     }
 
     
-}*/
+}
